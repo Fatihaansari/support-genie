@@ -14,7 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          booking_date: string
+          booking_number: string
+          booking_time: string
+          created_at: string
+          customer_id: string
+          description: string
+          id: string
+          location: string
+          provider_id: string
+          provider_profile_id: string
+          service_category: string
+          status: Database["public"]["Enums"]["booking_status"]
+          updated_at: string
+        }
+        Insert: {
+          booking_date: string
+          booking_number?: string
+          booking_time: string
+          created_at?: string
+          customer_id: string
+          description: string
+          id?: string
+          location: string
+          provider_id: string
+          provider_profile_id: string
+          service_category: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+        }
+        Update: {
+          booking_date?: string
+          booking_number?: string
+          booking_time?: string
+          created_at?: string
+          customer_id?: string
+          description?: string
+          id?: string
+          location?: string
+          provider_id?: string
+          provider_profile_id?: string
+          service_category?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_provider_profile_id_fkey"
+            columns: ["provider_profile_id"]
+            isOneToOne: false
+            referencedRelation: "provider_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+        }
+        Relationships: []
+      }
+      provider_profiles: {
+        Row: {
+          area: string
+          bio: string
+          category: string
+          created_at: string
+          headline: string
+          hourly_rate: number
+          id: string
+          response_time: string
+          skills: string[]
+          user_id: string
+        }
+        Insert: {
+          area?: string
+          bio?: string
+          category: string
+          created_at?: string
+          headline: string
+          hourly_rate: number
+          id?: string
+          response_time?: string
+          skills?: string[]
+          user_id: string
+        }
+        Update: {
+          area?: string
+          bio?: string
+          category?: string
+          created_at?: string
+          headline?: string
+          hourly_rate?: number
+          id?: string
+          response_time?: string
+          skills?: string[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          booking_id: string
+          comment: string
+          created_at: string
+          customer_id: string
+          id: string
+          provider_id: string
+          rating: number
+        }
+        Insert: {
+          booking_id: string
+          comment?: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          provider_id: string
+          rating: number
+        }
+        Update: {
+          booking_id?: string
+          comment?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          provider_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +215,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      booking_status:
+        | "pending"
+        | "accepted"
+        | "rejected"
+        | "in_progress"
+        | "completed"
+      user_role: "customer" | "provider"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +348,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      booking_status: [
+        "pending",
+        "accepted",
+        "rejected",
+        "in_progress",
+        "completed",
+      ],
+      user_role: ["customer", "provider"],
+    },
   },
 } as const
