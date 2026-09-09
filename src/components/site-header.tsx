@@ -55,6 +55,15 @@ export function SiteHeader() {
               Dashboard
             </Link>
           )}
+          {session && profile?.role === "provider" && (
+            <Link
+              to="/provider-profile"
+              className="hidden rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:block"
+              activeProps={{ className: "text-foreground" }}
+            >
+              My listing
+            </Link>
+          )}
           {session === undefined ? (
             <span className="size-9" />
           ) : session ? (
