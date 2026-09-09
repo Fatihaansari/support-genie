@@ -71,7 +71,8 @@ function ProviderProfilePage() {
 
   const [form, setForm] = useState<Listing>(EMPTY);
   const [skillsText, setSkillsText] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  type FieldErrors = Partial<Record<"headline" | "bio" | "area" | "hourly_rate" | "skills", string>>;
+  const [errors, setErrors] = useState<FieldErrors>({});
 
   useEffect(() => {
     if (data) {
@@ -111,7 +112,7 @@ function ProviderProfilePage() {
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
-    const next: Record<string, string> = {};
+    const next: FieldErrors = {};
     if (form.headline.trim().length < 8) next.headline = "Write a headline of at least 8 characters.";
     if (form.bio.trim().length < 20) next.bio = "Tell customers a bit more (20+ characters).";
     if (!form.area.trim()) next.area = "Add the area you serve.";
